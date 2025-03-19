@@ -54,6 +54,11 @@ function App() {
     })
   }
 
+  const deleteUser = (userId) => {
+    const deletedUser = userList.filter(user => user.id !== userId);
+    setUserList(deletedUser);
+  }
+
   return (
     <div>
       <main>
@@ -94,7 +99,9 @@ function App() {
         <h2>System Users</h2>
         <ul>
           {userList.map((user) => (
-            <li key={user.id}>{user.name} : {user.email}</li>
+            <li key={user.id}>{user.name} : {user.email}
+              <button onClick={() => deleteUser(user.id)}>Delete</button>
+            </li>
           ))}
         </ul>
       </section>
