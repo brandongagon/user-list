@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
@@ -8,13 +8,20 @@ function App() {
     email: ''
   })
 
-  const [userList, setUserList] = useState([
-    {
-      id: new Date().valueOf(),
-      name: 'John',
-      email: 'john@gmaill.com',
-    }
-  ]);
+  const initialUser = {
+    id: new Date().valueOf(),
+    name: 'John',
+    email: 'john@gmaill.com',
+  }
+
+  const [userList, setUserList] = useState(() => {
+    const savedUsers = localStorage.getItem('users');
+    return savedUsers ? JSON.parse(savedUsers) : [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('users', JSON.stringify(userList));
+  }, [userList]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
