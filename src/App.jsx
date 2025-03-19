@@ -1,34 +1,98 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [formData, setFormData] = useState({
+    id: new Date().valueOf(),
+    name: '',
+    email: ''
+  })
+
+  const [userList, setUserList] = useState([
+    {
+      id: new Date().valueOf(),
+      name: 'John',
+      email: 'john@gmaill.com',
+    }
+  ]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.email) {
+      alert('name and email required')
+    } else {
+      
+      const newUser = {
+        id: new Date().valueOf(),
+        name: formData.name,
+        email: formData.email
+      }
+
+      setUserList([...userList, newUser]);
+
+      // reset form inputs
+      setFormData({
+        id: null,
+        name: '',
+        email: ''
+      })
+    }
+  }
+
+  const handleInputChange = (e) => {
+    const {name, value} = e.target
+    setFormData({
+      ...formData,
+      [name]: value
+    })
+  }
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <main>
+      <form onSubmit={handleSubmit}>
+
+        <aside>
+          <p>
+          <label htmlFor='name'>Name*</label>
+          </p>
+          
+          <input
+            type="text"
+            value={formData.name}
+            placeholder="enter user name"
+            name="name"
+            onChange={handleInputChange}
+          />
+        </aside>
+        
+        <aside>
+          <p>
+          <label htmlFor='email'>Email*</label>
+          </p>          
+
+          <input
+            type="email"
+            value={formData.email}
+            placeholder="enter user email"
+            name="email"
+            onChange={handleInputChange}
+          />
+        </aside>        
+
+        <button type="submit">Add User</button>
+      </form>
+
+      <section>
+        <h2>System Users</h2>
+        <ul>
+          {userList.map((user) => (
+            <li key={user.id}>{user.name} : {user.email}</li>
+          ))}
+        </ul>
+      </section>
+      </main>         
+    </div>
   )
 }
 
